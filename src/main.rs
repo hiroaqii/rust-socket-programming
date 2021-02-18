@@ -1,4 +1,5 @@
 use std::env;
+use clap::Clap;
 
 #[macro_use]
 extern crate log;
@@ -8,17 +9,21 @@ mod tcp_server;
 mod udp_client;
 mod udp_server;
 
+#[derive(Clap)]
+struct Opts {
+    protocol: String,
+    role: String,
+    address: String
+}
+
 fn main() {
+    let opts: Opts = Opts::parse();
     env::set_var("RUST_LOG", "debug");
     env_logger::init();
-    let args: Vec<String> = env::args().collect();
-    if args.len() != 4 {
-        error!("Please specify [tcp|udp] [server|client] [addr:port].");
-        std::process::exit(1);
-    }
-    let protocol: &str = &args[1];
-    let role: &str = &args[2];
-    let address = &args[3];
+
+    let protocol = opts.protocol.as_str();
+    let role = opts.role.as_str();
+    let address = opts.address.as_str();
     match protocol {
         "tcp" => match role {
             "server" => {
