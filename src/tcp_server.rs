@@ -1,8 +1,9 @@
+use anyhow::Result;
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::{str, thread};
 
-pub fn serve(address: &str) -> Result<(), failure::Error> {
+pub fn serve(address: &str) -> Result<()> {
     let listener = TcpListener::bind(address)?;
     loop {
         let (stream, _) = listener.accept()?;
@@ -12,7 +13,7 @@ pub fn serve(address: &str) -> Result<(), failure::Error> {
     }
 }
 
-fn handler(mut stream: TcpStream) -> Result<(), failure::Error> {
+fn handler(mut stream: TcpStream) -> Result<()> {
     debug!("Handling data from {}", stream.peer_addr()?);
     let mut buffer = [0u8; 1024];
     loop {

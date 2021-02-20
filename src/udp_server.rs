@@ -1,7 +1,8 @@
+use anyhow::Result;
 use std::net::UdpSocket;
 use std::str;
 
-pub fn serve(address: &str) -> Result<(), failure::Error> {
+pub fn serve(address: &str) -> Result<()> {
     let server_socket = UdpSocket::bind(address)?;
     loop {
         let mut buf = [0u8; 1024];
